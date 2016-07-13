@@ -16,3 +16,6 @@
 !/log/.keep
 /tmp
 .idea/
+.ruby-gemset
+.ruby-version
+/config/database.yml
