@@ -20,4 +20,11 @@ feature 'User creates an answer', %q{
     expect(page).to have_content 'some_answer'
     expect(current_path).to eq question_path(question)
   end
+
+  scenario 'Non-authenticated user tries to give an answer' do
+    visit question_path(question)
+    click_on 'Give an answer'
+
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
 end
