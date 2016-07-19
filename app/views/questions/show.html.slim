@@ -4,6 +4,8 @@ h2 = @question.title
 p  = @question.body
 
 p = link_to 'Give an answer', new_question_answer_path(@question)
+- if user_signed_in? && current_user.id == @question.user.id
+  p = link_to 'Delete', @question, method: :delete
 
 h2 Answers
 - @question.answers.each do |answer|
