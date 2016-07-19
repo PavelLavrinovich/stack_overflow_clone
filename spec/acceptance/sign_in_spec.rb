@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-feature 'User sign in', %q{
+feature 'User signs in', %q{
   In order to create questions
   As an user
-  I want to sign in
+  I want to be able to sign in
 } do
-  scenario 'Registered user try to sign in' do
+  scenario 'Registered user tries to sign in' do
     User.create(email: 'email@example.com', password: 'password')
 
     visit new_user_session_path
