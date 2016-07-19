@@ -5,13 +5,11 @@ feature 'User creates a question', %q{
   As an authenticated user
   I want to be able to create question
 } do
-  scenario 'Authenticated user tries to create a question' do
-    User.create(email: 'email@example.com', password: 'password')
 
-    visit new_user_session_path
-    fill_in 'Email', with: 'email@example.com'
-    fill_in 'Password', with: 'password'
-    click_on 'Log in'
+  let(:user){ create(:user) }
+
+  scenario 'Authenticated user tries to create a question' do
+    sign_in(user)
 
     visit questions_path
     click_on 'Ask a question'
