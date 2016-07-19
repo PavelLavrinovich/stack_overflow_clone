@@ -5,8 +5,10 @@ p  = @question.body
 
 p = link_to 'Give an answer', new_question_answer_path(@question)
 - if user_signed_in? && current_user.id == @question.user.id
-  p = link_to 'Delete', @question, method: :delete
+  p = link_to 'Delete the question', @question, method: :delete
 
 h2 Answers
 - @question.answers.each do |answer|
   p = answer.body
+  - if user_signed_in? && current_user.id == answer.user.id
+    p = link_to 'Delete the answer', answer, method: :delete

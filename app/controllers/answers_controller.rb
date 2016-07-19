@@ -12,6 +12,12 @@ class AnswersController < ApplicationController
     @answer.save ? redirect_to(@question) : render(:new)
   end
 
+  def destroy
+    @answer = Answer.find(params[:id])
+    @answer.destroy
+    redirect_to @answer.question
+  end
+
   private
 
   def answer_params
