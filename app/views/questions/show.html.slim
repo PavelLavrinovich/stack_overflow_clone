@@ -2,3 +2,9 @@ h1 Question
 
 h2 = @question.title
 p  = @question.body
+
+p = link_to 'Give an answer', new_question_answer_path(@question)
+
+h2 Answers
+- @question.answers.each do |answer|
+  p = answer.body

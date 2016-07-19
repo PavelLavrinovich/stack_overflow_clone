@@ -1,2 +1,5 @@
-h1 Answers#new
-p Find me in app/views/answers/new.html.slim
+h1 New answer
+= form_for [@question, @answer], url: question_answers_path, html: { method: :post } do |f|
+  p = f.label :body
+  p = f.text_area :body
+  p = f.submit 'Create'
