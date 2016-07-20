@@ -5,12 +5,15 @@ feature 'User views a questions with answers', %q{
   As an user
   I want to be able to view a question with answers
 } do
-  let(:answer) { create(:answer) }
+  let(:question) { create(:question) }
+  let(:answers) { create_list(:answer, 2) }
 
-  scenario 'User tries to view question with answer' do
-    visit question_path(answer.question)
-    expect(page).to have_content answer.question.title
-    expect(page).to have_content answer.question.body
-    expect(page).to have_content answer.body
+  scenario 'User tries to view question with answers' do
+    question.answers = answers
+    visit question_path(question)
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+    expect(page).to have_content answers.first.body
+    expect(page).to have_content answers.last.body
   end
 end
