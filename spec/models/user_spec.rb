@@ -7,11 +7,13 @@ RSpec.describe User do
   it { should have_many :answers }
 
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
   let(:another_user) { create(:user) }
 
   describe 'author?' do
     it 'returns true for authors' do
-      expect(question.user.author?(question)).to eq true
+      question.user = user
+      expect(user.author?(question)).to eq true
     end
 
     it 'returns false for another users' do

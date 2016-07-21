@@ -14,7 +14,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'saves the answer for the user' do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }.
-            to change(answer.user.answers, :count).by(1)
+            to change(@user.answers, :count).by(1)
       end
 
       it 'redirects to question show view' do
@@ -41,7 +41,7 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user { before { @user = answer.user } }
 
       it 'deletes the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question }.to change(answer.user.answers, :count).
+        expect { delete :destroy, id: answer, question_id: answer.question }.to change(@user.answers, :count).
             by(-1)
       end
 

@@ -7,6 +7,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   def author?(work)
-    work.user.id == id
+    work.user_id == id
   end
 end
