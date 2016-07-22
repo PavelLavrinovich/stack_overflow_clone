@@ -1,12 +1,21 @@
 class AnswersController < ApplicationController
-  def new
-    @answer = Answer.new
-  end
+  before_action :authenticate_user!
 
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
-    @answer.save ? redirect_to(@answer) : render(:new)
+    @answer.user = current_user
+    @answer.save ? redirect_to(@question) : render('questions/show')
+  end
+
+  def destroy
+    @answer = Answer.find(params[:id])
+    if current_user.author?(@answer)
+      @answer.destroy
+      redirect_to @answer.question
+    else
+      render 'questions/show'
+    end
   end
 
   private

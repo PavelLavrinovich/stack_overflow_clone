@@ -24,12 +24,17 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
+    it 'assigns a new Answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
   end
 
   describe 'GET #new' do
+    sign_in_user
     before { get :new }
 
     it 'assigns a new Question to @question' do
@@ -42,6 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    sign_in_user
     before { get :edit, id: question }
 
     it 'assigns the requested question to @question' do
@@ -54,9 +60,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    sign_in_user { before { @user = question.user } }
     context 'with valid attributes' do
       it 'saves the question' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { post :create, question: attributes_for(:question) }.to change(question.user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -78,6 +85,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question)
@@ -113,15 +121,31 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { question }
+    context 'like an author' do
+      sign_in_user { before { @user = question.user } }
 
-    it 'deletes the question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      it 'deletes the question' do
+        expect { delete :destroy, id: question }.to change(question.user.questions, :count).by(-1)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'like an another user' do
+      sign_in_user
+      before { question }
+
+      it 'does not delete the question' do
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      end
+
+      it 'renders show view' do
+        delete :destroy, id: question
+        expect(response).to render_template :show
+      end
     end
   end
 
