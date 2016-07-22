@@ -7,13 +7,11 @@ p  = @question.body
   p = link_to 'Delete the question', @question, method: :delete
 
 h2 Answers
-- @question.answers.each do |answer|
-  p = answer.body
-  - if user_signed_in? && current_user.author?(answer)
-    p = link_to 'Delete the answer', answer, method: :delete
 
-h2 Your answer
-= form_for [@question, @answer] do |f|
-  p = f.label :body
+.answers
+  = render @question.answers
+
+= form_for [@question, @answer], remote: true do |f|
+  p = f.label :body, 'Your answer'
   p = f.text_area :body
   p = f.submit 'Create'

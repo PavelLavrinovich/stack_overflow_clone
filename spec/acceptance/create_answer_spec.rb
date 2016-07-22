@@ -9,11 +9,11 @@ feature 'User creates an answer', %q{
   let(:user) { create(:user) }
   let(:question) { create(:question) }
 
-  scenario 'Authenticated user tries to give an answer' do
+  scenario 'Authenticated user tries to give an answer', js: true do
     sign_in(user)
 
     visit question_path(question)
-    fill_in 'Body', with: 'some_answer'
+    fill_in 'Your answer', with: 'some_answer'
     click_on 'Create'
 
     expect(page).to have_content 'some_answer'

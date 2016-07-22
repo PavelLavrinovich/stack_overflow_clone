@@ -8,30 +8,30 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user { before { @user = answer.user } }
     context 'with valid attributes' do
       it 'saves the answer for the question' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.
             to change(question.answers, :count).by(1)
       end
 
       it 'saves the answer for the user' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.
             to change(@user.answers, :count).by(1)
       end
 
       it 'redirects to question show view' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_path(question)
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.
             to_not change(Answer, :count)
       end
 
       it 'renders new view' do
-        post :create, question_id: question, answer: attributes_for(:invalid_answer)
-        expect(response).to render_template 'questions/show'
+        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
+        expect(response).to render_template :create
       end
     end
   end
