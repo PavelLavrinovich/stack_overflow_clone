@@ -1,4 +1,5 @@
 .answer id=dom_id(answer)
-  p = answer.body
+  p id="#{dom_id(answer)}-body" = answer.body
   - if user_signed_in? && current_user.author?(answer)
-    p = link_to 'Delete the answer', answer, method: :delete
+    p class="edit-link" data-dom-id=dom_id(answer) = submit_tag 'Edit the answer'
+    p = link_to 'Delete the answer', answer, method: :delete, remote: true

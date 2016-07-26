@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance/acceptance_helper'
 
 feature 'User deletes his answer.', %q{
   In order to cover my shame
@@ -9,7 +9,7 @@ feature 'User deletes his answer.', %q{
   let(:answer) { create(:answer) }
   let(:another_user) { create(:user) }
 
-  scenario 'Authenticated user tries to delete his answer' do
+  scenario 'Authenticated user tries to delete his answer', js: true do
     sign_in(answer.user)
 
     visit question_path(answer.question)

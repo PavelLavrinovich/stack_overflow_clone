@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
+  let(:answer) { create(:answer, question: question) }
 
   describe 'POST #create' do
     sign_in_user { before { @user = answer.user } }
@@ -29,9 +29,44 @@ RSpec.describe AnswersController, type: :controller do
             to_not change(Answer, :count)
       end
 
-      it 'renders new view' do
+      it 'renders create view' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :create
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    sign_in_user { before { @user = answer.user } }
+
+    context 'with valid attributes' do
+      it 'assigns the requested answer to @answer' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'changes answer attributes' do
+        patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'renders update view' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      before { patch :update, id: answer, question_id: question, answer: attributes_for(:invalid_answer), format: :js }
+
+      it 'does not change question attributes' do
+        answer.reload
+        expect(answer.body).to_not eq nil
+      end
+
+      it 'renders update view' do
+        expect(response).to render_template :update
       end
     end
   end
@@ -41,13 +76,13 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user { before { @user = answer.user } }
 
       it 'deletes the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question }.to change(@user.answers, :count).
-            by(-1)
+        expect { delete :destroy, id: answer, question_id: answer.question, format: :js }.
+            to change(@user.answers, :count).by(-1)
       end
 
-      it 'redirects to index view' do
-        delete :destroy, id: answer, question_id: answer.question
-        expect(response).to redirect_to question_path(answer.question)
+      it 'renders delete view' do
+        delete :destroy, id: answer, question_id: answer.question, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -56,12 +91,12 @@ RSpec.describe AnswersController, type: :controller do
       before { answer }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer, question_id: answer.question, format: :js }.to_not change(Answer, :count)
       end
 
       it 'render question show view' do
-        delete :destroy, id: answer, question_id: answer.question
-        expect(response).to render_template 'questions/show'
+        delete :destroy, id: answer, question_id: answer.question, format: :js
+        expect(response).to render_template :destroy
       end
     end
   end
