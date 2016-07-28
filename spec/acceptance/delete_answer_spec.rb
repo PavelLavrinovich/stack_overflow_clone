@@ -1,8 +1,8 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User deletes his answer.', %q{
   In order to cover my shame
-  As an authenticated user
+  As an author of answer
   I want be able to delete my answers
 } do
 

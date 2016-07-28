@@ -85,36 +85,53 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user { before { @user = question.user } }
-    context 'with valid attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(assigns(:question)).to eq question
+    context 'like an author' do
+      sign_in_user { before { @user = question.user } }
+      context 'with valid attributes' do
+        it 'assigns the requested question to @question' do
+          patch :update, id: question, question: attributes_for(:question)
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'changes question attributes' do
+          patch :update, id: question, question: { title: 'new title', body: 'new body'}
+          question.reload
+          expect(question.title).to eq 'new title'
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'redirects to show view' do
+          patch :update, id: question, question: attributes_for(:question)
+          expect(response).to redirect_to question
+        end
       end
 
-      it 'changes question attributes' do
-        patch :update, id: question, question: { title: 'new title', body: 'new body'}
-        question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
-      end
+      context 'with invalid attributes' do
+        before { patch :update, id: question, question: attributes_for(:invalid_question) }
 
-      it 'redirects to show view' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(response).to redirect_to question
+        it 'does not change question attributes' do
+          question.reload
+          expect(question.title).to_not eq nil
+          expect(question.body).to_not eq nil
+        end
+
+        it 'renders edit view' do
+          expect(response).to render_template :edit
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, id: question, question: attributes_for(:invalid_question) }
+    context 'like an another user' do
+      sign_in_user
+      before { patch :update, id: question, question: { title: 'new title', body: 'new_body'} }
 
       it 'does not change question attributes' do
         question.reload
-        expect(question.title).to_not eq nil
-        expect(question.body).to_not eq nil
+        expect(question.title).to_not eq 'new title'
+        expect(question.body).to_not eq 'new body'
       end
 
-      it 'renders edit view' do
+      it 'render edit view' do
         expect(response).to render_template :edit
       end
     end

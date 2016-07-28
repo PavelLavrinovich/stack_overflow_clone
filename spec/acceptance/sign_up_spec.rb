@@ -1,4 +1,4 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User signs up', %q{
   In order to create questions and answers

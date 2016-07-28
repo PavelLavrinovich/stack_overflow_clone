@@ -1,8 +1,8 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User edits the answer', %q{
   In order to make the answer even better
-  As an author
+  As an author of answer
   In want to be able to edit my answer
 } do
   let(:user) { create(:user) }
@@ -19,7 +19,6 @@ feature 'User edits the answer', %q{
       sign_in(user)
       visit question_path(question)
       click_on 'Edit the answer'
-      save_and_open_page
       fill_in 'Your answer', with: 'new_answer'
       click_on 'Confirm'
 

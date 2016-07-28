@@ -37,36 +37,53 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user { before { @user = answer.user } }
+    context 'like an author' do
+      sign_in_user { before { @user = answer.user } }
 
-    context 'with valid attributes' do
-      it 'assigns the requested answer to @answer' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(assigns(:answer)).to eq answer
+      context 'with valid attributes' do
+        it 'assigns the requested answer to @answer' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'changes answer attributes' do
+          patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+          expect(response).to render_template :update
+        end
       end
 
-      it 'changes answer attributes' do
-        patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
-        answer.reload
-        expect(answer.body).to eq 'new body'
-      end
+      context 'with invalid attributes' do
+        before do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:invalid_answer), format: :js
+        end
 
-      it 'renders update view' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(response).to render_template :update
+        it 'does not change question attributes' do
+          answer.reload
+          expect(answer.body).to_not eq nil
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, id: answer, question_id: question, answer: attributes_for(:invalid_answer), format: :js }
+    context 'like an another user' do
+      before { patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js }
 
-      it 'does not change question attributes' do
+      it 'does not change answer attributes' do
         answer.reload
-        expect(answer.body).to_not eq nil
+        expect(answer.body).to_not eq 'new body'
       end
 
       it 'renders update view' do
-        expect(response).to render_template :update
+        expect(response).to_not render_template :update
       end
     end
   end

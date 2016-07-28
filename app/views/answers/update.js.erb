@@ -1,12 +1,10 @@
-$(document).ready(function () {
-  <% if @answer.errors.present? %>
-    <% @answer.errors.full_messages.each do |message| %>
-      $('.answer-errors').html('<%= j message %>');
-    <% end %>
-  <% else %>
-    $('#<%= dom_id(@answer) %>-body').html('<%= j @answer.body %>');
-    $('#answer_body').val('');
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('.answer-errors').html('<%= j message.html_safe %>');
   <% end %>
-    $('#new_answer').prop('method', 'post');
-    $('#new_answer').prop('action', '/questions/<%= j @answer.question_id.to_s %>/answers');
-});
+<% else %>
+  $('#<%= dom_id(@answer) %>-body').html('<%= j @answer.body %>');
+  $('#answer_body').val('');
+<% end %>
+$('#new_answer').prop('method', 'post');
+$('#new_answer').prop('action', '/questions/<%= j @answer.question_id.to_s %>/answers');

@@ -7,12 +7,10 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
     @answer.save
-    respond_to { |format| format.js }
   end
 
   def update
     @answer.update(answer_params) if current_user.author?(@answer)
-    respond_to { |format| format.js }
   end
 
   def destroy

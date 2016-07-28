@@ -1,4 +1,4 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User views a questions with answers', %q{
   In order to read something interesting

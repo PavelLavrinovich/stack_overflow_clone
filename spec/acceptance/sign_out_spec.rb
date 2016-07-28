@@ -1,4 +1,4 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User signs out', %q{
   In order to keep my profile in safe

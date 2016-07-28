@@ -1,4 +1,4 @@
-require 'acceptance/acceptance_helper'
+require_relative 'acceptance_helper'
 
 feature 'User views questions', %q{
   In order to find interesting questions
