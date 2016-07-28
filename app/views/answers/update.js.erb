@@ -1,10 +1,8 @@
 <% if @answer.errors.present? %>
   <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message.html_safe %>');
+    $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
   $('#<%= dom_id(@answer) %>-body').html('<%= j @answer.body %>');
-  $('#answer_body').val('');
+  $('#<%= dom_id(@answer) %>-edit-form').toggle();
 <% end %>
-$('#new_answer').prop('method', 'post');
-$('#new_answer').prop('action', '/questions/<%= j @answer.question_id.to_s %>/answers');

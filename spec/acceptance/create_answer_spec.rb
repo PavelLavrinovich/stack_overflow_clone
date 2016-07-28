@@ -14,6 +14,7 @@ feature 'User creates an answer', %q{
 
     visit question_path(question)
     fill_in 'Your answer', with: 'some_answer'
+    #sleep(600)
     click_on 'Confirm'
 
     expect(page).to have_content 'some_answer'

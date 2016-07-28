@@ -7,17 +7,18 @@ feature 'User chooses some answer the best for his question', %q{
 } do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
-  let(:answers) { create(:answer, 10, question: question) }
+  let(:answers) { create_list(:answer, 10) }
 
   describe 'Authenticated user' do
     before { sign_in(user) }
 
     scenario 'tries to choose some answer the best for his question' do
+      question.answers = answers
       visit question_path(question)
 
-      find("##{dom_id(answers.last)}").click 'Make this answer the best'
+      find('.choose_the_best').last.click 'Make this answer the best'
 
-      expect(dom_id(answers.last)).to gt dom_id(answers.first)
+      expect(find('.answer').first).to have_content answers.last.body
     end
 
     scenario "tries to choose some answer the best for another person's question" do

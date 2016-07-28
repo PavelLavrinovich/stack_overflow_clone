@@ -17,10 +17,14 @@ feature 'User edits the answer', %q{
 
     scenario 'tries to edit his answer', js: true do
       sign_in(user)
+
       visit question_path(question)
       click_on 'Edit the answer'
-      fill_in 'Your answer', with: 'new_answer'
-      click_on 'Confirm'
+
+      within '.answers' do
+        fill_in 'Your answer', with: 'new_answer'
+        click_on 'Confirm'
+      end
 
       expect(page).to have_content 'new_answer'
       expect(page).to_not have_content answer.body

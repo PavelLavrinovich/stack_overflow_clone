@@ -2,4 +2,6 @@
   p id="#{dom_id(answer)}-body" = answer.body
   - if user_signed_in? && current_user.author?(answer)
     p class="edit-link" data-dom-id=dom_id(answer) = submit_tag 'Edit the answer'
+    .edit-answer-form id="#{dom_id(answer)}-edit-form"
+      = render 'answers/form', question: nil, answer: answer
     p = link_to 'Delete the answer', answer, method: :delete, remote: true
