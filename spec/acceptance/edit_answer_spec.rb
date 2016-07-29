@@ -2,7 +2,7 @@ require_relative 'acceptance_helper'
 
 feature 'User edits the answer', %q{
   In order to make the answer even better
-  As an author of answer
+  As an author of the answer
   In want to be able to edit my answer
 } do
   let(:user) { create(:user) }
