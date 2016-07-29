@@ -12,13 +12,15 @@ feature 'User chooses some answer the best for his question', %q{
   describe 'Authenticated user' do
     before { sign_in(user) }
 
-    scenario 'tries to choose some answer the best for his question' do
+    scenario 'tries to choose some answer the best for his question', js: true do
       question.answers = answers
       visit question_path(question)
 
-      find('.choose_the_best').last.click 'Make this answer the best'
+      all('.choose_the_best').last.click
 
-      expect(find('.answer').first).to have_content answers.last.body
+      wait_for_ajax
+
+      expect(all('.answer').first).to have_content answers.last.body
     end
 
     scenario "tries to choose some answer the best for another person's question" do

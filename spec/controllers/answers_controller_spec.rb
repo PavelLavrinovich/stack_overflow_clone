@@ -93,12 +93,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user { before { @user = answer.user } }
 
       it 'deletes the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question, format: :js }.
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.
             to change(@user.answers, :count).by(-1)
       end
 
       it 'renders delete view' do
-        delete :destroy, id: answer, question_id: answer.question, format: :js
+        delete :destroy, id: answer, question_id: question, format: :js
         expect(response).to render_template :destroy
       end
     end
@@ -108,12 +108,47 @@ RSpec.describe AnswersController, type: :controller do
       before { answer }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question, format: :js }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
       it 'render question show view' do
-        delete :destroy, id: answer, question_id: answer.question, format: :js
+        delete :destroy, id: answer, question_id: question, format: :js
         expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH choose the best' do
+    context 'like an author of the question' do
+      sign_in_user { before { @user = question.user } }
+      before { patch :choose_the_best, id: answer, question_id: question, format: :js }
+
+      it 'assigns the answer to @answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'chooses the answer like the best for the question' do
+        answer.reload
+        expect(answer.best).to eq true
+      end
+
+      it 'renders choose the best view' do
+        expect(response).to render_template :choose_the_best
+      end
+
+    end
+
+    context 'like an another user' do
+      sign_in_user
+      before { patch :choose_the_best, id: answer, question_id: question, format: :js }
+
+      it 'does not choose the answer like the best for the question' do
+        answer.reload
+        expect(answer.best).to eq false
+      end
+
+      it 'renders choose the best view' do
+        expect(response).to render_template :choose_the_best
       end
     end
   end

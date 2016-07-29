@@ -1,4 +1,7 @@
 .answer id=dom_id(answer)
+  - if user_signed_in? && current_user.author?(answer.question)
+    p = link_to 'Choose the best', choose_the_best_answer_path(answer), method: :patch, remote: true,
+            class: :choose_the_best
   p id="#{dom_id(answer)}-body" = answer.body
   - if user_signed_in? && current_user.author?(answer)
     p class="edit-link" data-dom-id=dom_id(answer) = submit_tag 'Edit the answer'

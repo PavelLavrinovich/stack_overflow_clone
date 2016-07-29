@@ -1,0 +1,4 @@
+var answer = $('#<%= dom_id(@answer) %>');
+$('.answers').prepend(answer.prop('outerHTML'));
+answer = answer.last();
+answer.prop('outerHTML', '');

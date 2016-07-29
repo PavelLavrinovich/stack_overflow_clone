@@ -9,6 +9,6 @@ p  = @question.body
 h2 Answers
 
 .answers
-  = render @question.answers
+  = render @question.answers.from_the_best
 
 = render 'answers/form', question: @question, answer: @answer
