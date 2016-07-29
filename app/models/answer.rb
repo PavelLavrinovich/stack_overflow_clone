@@ -8,8 +8,10 @@ class Answer < ActiveRecord::Base
 
   def choose_the_best
     unless best
-      question.answers.where(best: true).update_all(best: false)
-      update best: true
+      Answer.transaction do
+        question.answers.where(best: true).update_all(best: false)
+        update best: true
+      end
     end
   end
 end
