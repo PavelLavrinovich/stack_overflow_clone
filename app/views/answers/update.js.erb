@@ -3,6 +3,6 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('#<%= dom_id(@answer) %>-body').html('<%= j @answer.body %>');
+  $('#<%= dom_id(@answer) %>-edit-form').toggle();
 <% end %>

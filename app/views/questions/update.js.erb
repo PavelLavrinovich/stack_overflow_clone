@@ -1,0 +1,9 @@
+<% if @question.errors.present? %>
+  <% @question.errors.full_messages.each do |message| %>
+    $('.question-errors').html('<%= j message %>');
+  <% end %>
+<% else %>
+  $('#<%= dom_id(@question) %>-title').html('<%= j @question.title %>');
+  $('#<%= dom_id(@question) %>-body').html('<%= j @question.body %>');
+  $('#<%= dom_id(@question) %>-edit-form').toggle();
+<% end %>

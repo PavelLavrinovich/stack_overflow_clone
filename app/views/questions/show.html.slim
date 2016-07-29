@@ -1,17 +1,18 @@
 h1 Question
 
-h2 = @question.title
-p  = @question.body
+.question
+  h3 id="#{dom_id(@question)}-title" = @question.title
+  p id="#{dom_id(@question)}-body" = @question.body
 
-- if user_signed_in? && current_user.author?(@question)
-  p = link_to 'Delete the question', @question, method: :delete
+  - if user_signed_in? && current_user.author?(@question)
+    p class="edit-link" data-dom-id=dom_id(@question) = submit_tag 'Edit the question'
+    .edit-answer-form id="#{dom_id(@question)}-edit-form"
+      = render 'questions/form', question: @question
+    p = link_to 'Delete the question', @question, method: :delete
 
 h2 Answers
 
 .answers
-  = render @question.answers
+  = render @question.answers.from_the_best
 
-= form_for [@question, @answer], remote: true do |f|
-  p = f.label :body, 'Your answer'
-  p = f.text_area :body
-  p = f.submit 'Create'
+= render 'answers/form', question: @question, answer: @answer

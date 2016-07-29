@@ -14,9 +14,6 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-  end
-
   def create
     @question = Question.new(question_params)
     @question.user = current_user
@@ -29,7 +26,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) ? redirect_to(@question) : render(:edit)
+    render :update if current_user.author?(@question) && @question.update(question_params)
   end
 
   def destroy

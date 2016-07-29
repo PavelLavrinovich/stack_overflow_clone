@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'User creates a question', %q{
   In order to find an answer
@@ -15,7 +15,7 @@ feature 'User creates a question', %q{
     click_on 'Ask a question'
     fill_in 'Title', with: 'some_title'
     fill_in 'Body', with: 'some_body'
-    click_on 'Ask'
+    click_on 'Confirm'
 
     expect(page).to have_content 'Your question was successfully created.'
     expect(page).to have_content 'some_title'

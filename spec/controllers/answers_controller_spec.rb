@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
-  let(:answer) { create(:answer) }
+  let(:answer) { create(:answer, question: question) }
 
   describe 'POST #create' do
     sign_in_user { before { @user = answer.user } }
@@ -29,9 +29,61 @@ RSpec.describe AnswersController, type: :controller do
             to_not change(Answer, :count)
       end
 
-      it 'renders new view' do
+      it 'renders create view' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :create
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context 'like an author' do
+      sign_in_user { before { @user = answer.user } }
+
+      context 'with valid attributes' do
+        it 'assigns the requested answer to @answer' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'changes answer attributes' do
+          patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        before do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:invalid_answer), format: :js
+        end
+
+        it 'does not change question attributes' do
+          answer.reload
+          expect(answer.body).to_not eq nil
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'like an another user' do
+      before { patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: :js }
+
+      it 'does not change answer attributes' do
+        answer.reload
+        expect(answer.body).to_not eq 'new body'
+      end
+
+      it 'renders update view' do
+        expect(response).to_not render_template :update
       end
     end
   end
@@ -41,13 +93,13 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user { before { @user = answer.user } }
 
       it 'deletes the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question }.to change(@user.answers, :count).
-            by(-1)
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.
+            to change(@user.answers, :count).by(-1)
       end
 
-      it 'redirects to index view' do
-        delete :destroy, id: answer, question_id: answer.question
-        expect(response).to redirect_to question_path(answer.question)
+      it 'renders delete view' do
+        delete :destroy, id: answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -56,12 +108,47 @@ RSpec.describe AnswersController, type: :controller do
       before { answer }
 
       it 'does not delete the answer' do
-        expect { delete :destroy, id: answer, question_id: answer.question }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
       it 'render question show view' do
-        delete :destroy, id: answer, question_id: answer.question
-        expect(response).to render_template 'questions/show'
+        delete :destroy, id: answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH choose the best' do
+    context 'like an author of the question' do
+      sign_in_user { before { @user = question.user } }
+      before { patch :choose_the_best, id: answer, question_id: question, format: :js }
+
+      it 'assigns the answer to @answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'chooses the answer like the best for the question' do
+        answer.reload
+        expect(answer.best).to eq true
+      end
+
+      it 'renders choose the best view' do
+        expect(response).to render_template :choose_the_best
+      end
+
+    end
+
+    context 'like an another user' do
+      sign_in_user
+      before { patch :choose_the_best, id: answer, question_id: question, format: :js }
+
+      it 'does not choose the answer like the best for the question' do
+        answer.reload
+        expect(answer.best).to eq false
+      end
+
+      it 'renders choose the best view' do
+        expect(response).to render_template :choose_the_best
       end
     end
   end
