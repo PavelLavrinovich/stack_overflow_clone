@@ -6,7 +6,7 @@ feature 'User signs in', %q{
   I want to be able to sign in
 } do
 
-  let(:user){ create(:user) }
+  given(:user){ create(:user) }
 
   scenario 'Registered user tries to sign in' do
     sign_in(user)

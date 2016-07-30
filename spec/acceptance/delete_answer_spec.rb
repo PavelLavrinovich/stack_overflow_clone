@@ -6,8 +6,8 @@ feature 'User deletes his answer.', %q{
   I want be able to delete my answers
 } do
 
-  let(:answer) { create(:answer) }
-  let(:another_user) { create(:user) }
+  given(:answer) { create(:answer) }
+  given(:another_user) { create(:user) }
 
   scenario 'Authenticated user tries to delete his answer', js: true do
     sign_in(answer.user)

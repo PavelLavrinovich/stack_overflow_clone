@@ -5,13 +5,14 @@ feature 'User edits the answer', %q{
   As an author of the answer
   In want to be able to edit my answer
 } do
-  let(:user) { create(:user) }
-  let(:another_user) { create(:user) }
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question, user: user) }
+
+  given(:user) { create(:user) }
+  given(:another_user) { create(:user) }
+  given(:question) { create(:question) }
+  given(:answer) { create(:answer, question: question, user: user) }
 
   describe 'Authenticated user' do
-    before do
+    background do
       answer
     end
 

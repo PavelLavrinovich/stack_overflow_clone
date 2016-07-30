@@ -5,12 +5,12 @@ feature 'User chooses some answer the best for his question', %q{
   As an author of question
   I want be able to choose the answer the best
 } do
-  let(:user) { create(:user) }
-  let(:question) { create(:question, user: user) }
-  let(:answers) { create_list(:answer, 10) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+  given(:answers) { create_list(:answer, 10) }
 
   describe 'Authenticated user' do
-    before { sign_in(user) }
+    background{ sign_in(user) }
 
     scenario 'tries to choose some answer the best for his question', js: true do
       question.answers = answers

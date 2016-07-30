@@ -6,8 +6,8 @@ feature 'User deletes his question.', %q{
   I want be able to delete my questions
 } do
 
-  let(:question) { create(:question) }
-  let(:another_user) { create(:user) }
+  given(:question) { create(:question) }
+  given(:another_user) { create(:user) }
 
   scenario 'Authenticated user tries to delete his question' do
     sign_in(question.user)
