@@ -1,0 +1,37 @@
+require_relative 'acceptance_helper'
+
+feature 'User can delete files for his question', %q{
+  In order to delete an wrong example
+  As an author
+  I want to be able to delete files for my question
+} do
+
+  given(:user) { create(:user) }
+  given(:another_user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+  given(:attachment) { create(:attachment, attachable: question)}
+
+  describe 'Authenticated user' do
+    scenario 'tries to delete files for his question', js: true do
+      sign_in(user)
+      visit question_path(question)
+      click_on 'Delete the file'
+
+      expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+    end
+
+    scenario "tries to delete files for another user's question" do
+      sign_in(another_user)
+      visit question_path(question)
+
+      expect(page).to_not have_content 'Delete the file'
+    end
+  end
+
+  scenario 'Unauthenticated user tries to delete a file for the question' do
+    visit question_path(question)
+
+    expect(page).to_not have_content 'Delete the file'
+  end
+
+end

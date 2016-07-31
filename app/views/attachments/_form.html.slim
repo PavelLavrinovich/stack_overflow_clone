@@ -1,4 +1,4 @@
 = f.fields_for :attachments do |a|
-  p
-    = a.label :file
-    = a.file_field :file
+  p = render 'application/attachment_fields', f: a
+  .links
+    = link_to_add_association 'Add the file', f, :attachments
