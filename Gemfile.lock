@@ -59,6 +59,7 @@ GEM
       json (>= 1.7)
       mime-types (>= 1.16)
       mimemagic (>= 0.3.0)
+    cocoon (1.2.9)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -156,6 +157,7 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     ref (2.0.0)
+    remotipart (1.2.1)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
     rspec-core (3.5.1)
@@ -239,6 +241,7 @@ DEPENDENCIES
   capybara
   capybara-webkit
   carrierwave
+  cocoon
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise
@@ -249,6 +252,7 @@ DEPENDENCIES
   launchy
   pg
   rails (= 4.2.6)
+  remotipart
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

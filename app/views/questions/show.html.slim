@@ -13,8 +13,8 @@ h1 Question
 h2 Attachments
 
 .attachments
-  - @question.attachments.each do |a|
-    p = link_to a.file.identifier, a.file.url
+  p = render @question.attachments
+
 
 h2 Answers
 

@@ -1,15 +1,8 @@
 p = form_for question, remote: remote do |f|
-  p
-    = f.label :title
-  p
-    = f.text_field :title
-  p
-    = f.label :body
-  p
-    = f.text_area :body
+  p = f.label :title
+  p = f.text_field :title
+  p = f.label :body
+  p = f.text_area :body
   p Attachments
-  p = f.fields_for :attachments do |a|
-      p
-        = a.label :file
-        = a.file_field :file
+  p = render 'attachments/form', f: f
   = f.submit 'Confirm'
