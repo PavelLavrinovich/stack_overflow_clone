@@ -40,7 +40,7 @@ feature 'User can delete files for his answer', %q{
     end
   end
 
-  scenario 'Unauthenticated user tries to delete a file for the question', js: true do
+  scenario 'Unauthenticated user tries to delete a file for the answer', js: true do
     attachment
     visit question_path(question)
 
