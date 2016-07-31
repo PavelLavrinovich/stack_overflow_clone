@@ -9,13 +9,17 @@ feature 'User can delete files for his question', %q{
   given(:user) { create(:user) }
   given(:another_user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:attachment) { create(:attachment, attachable: question)}
+  given(:attachment) { create(:attachment, attachable: question) }
 
   describe 'Authenticated user' do
     scenario 'tries to delete files for his question', js: true do
       sign_in(user)
+      attachment
       visit question_path(question)
-      click_on 'Delete the file'
+
+      within '.attachments' do
+        click_on 'Delete the file'
+      end
 
       expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     end
@@ -24,14 +28,18 @@ feature 'User can delete files for his question', %q{
       sign_in(another_user)
       visit question_path(question)
 
-      expect(page).to_not have_content 'Delete the file'
+      within '.attachments' do
+        expect(page).to_not have_content 'Delete the file'
+      end
     end
   end
 
   scenario 'Unauthenticated user tries to delete a file for the question' do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete the file'
+    within '.attachments' do
+      expect(page).to_not have_content 'Delete the file'
+    end
   end
 
 end

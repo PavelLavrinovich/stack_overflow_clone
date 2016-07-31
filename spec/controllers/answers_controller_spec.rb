@@ -17,7 +17,7 @@ RSpec.describe AnswersController, type: :controller do
             to change(@user.answers, :count).by(1)
       end
 
-      it 'redirects to question show view' do
+      it 'renders a create view' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :js
         expect(response).to render_template :create
       end
@@ -29,7 +29,7 @@ RSpec.describe AnswersController, type: :controller do
             to_not change(Answer, :count)
       end
 
-      it 'renders create view' do
+      it 'renders a create view' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :create
       end
@@ -97,7 +97,7 @@ RSpec.describe AnswersController, type: :controller do
             to change(@user.answers, :count).by(-1)
       end
 
-      it 'renders delete view' do
+      it 'renders a delete view' do
         delete :destroy, id: answer, question_id: question, format: :js
         expect(response).to render_template :destroy
       end
@@ -111,7 +111,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, id: answer, question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'render question show view' do
+      it 'renders a delete view' do
         delete :destroy, id: answer, question_id: question, format: :js
         expect(response).to render_template :destroy
       end

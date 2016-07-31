@@ -1,1 +1,4 @@
-p = link_to attachment.file.identifier, attachment.file.url
+div id=dom_id(attachment)
+  p = link_to attachment.file.identifier, attachment.file.url
+  - if user_signed_in? && current_user.author?(attachment.attachable)
+    p = link_to 'Delete the file', attachment, method: :delete, remote: true
