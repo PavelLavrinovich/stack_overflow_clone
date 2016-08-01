@@ -6,15 +6,14 @@ feature 'User creates an answer', %q{
   I want to be able to give an answer
 } do
 
-  let(:user) { create(:user) }
-  let(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question) }
 
   scenario 'Authenticated user tries to give an answer', js: true do
     sign_in(user)
 
     visit question_path(question)
     fill_in 'Your answer', with: 'some_answer'
-    #sleep(600)
     click_on 'Confirm'
 
     expect(page).to have_content 'some_answer'

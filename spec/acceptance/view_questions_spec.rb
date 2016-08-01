@@ -5,8 +5,9 @@ feature 'User views questions', %q{
   As an user
   I want to be able to view questions
 } do
-  let(:questions) { create_list(:question, 2) }
-  before { questions }
+
+  given(:questions) { create_list(:question, 2) }
+  background { questions }
 
   scenario 'User tries to view questions' do
     visit questions_path

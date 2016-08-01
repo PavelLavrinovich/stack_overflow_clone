@@ -5,9 +5,10 @@ feature 'User edits the question', %q{
   As an author of the question
   In want to be able to edit my question
 } do
-  let(:user) { create(:user) }
-  let(:another_user) { create(:user) }
-  let(:question) { create(:question, user: user) }
+
+  given(:user) { create(:user) }
+  given(:another_user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
   describe 'Authenticated user' do
     scenario 'tries to edit his question', js: true do

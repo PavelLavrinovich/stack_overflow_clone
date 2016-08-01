@@ -6,7 +6,7 @@ feature 'User creates a question', %q{
   I want to be able to create question
 } do
 
-  let(:user){ create(:user) }
+  given(:user){ create(:user) }
 
   scenario 'Authenticated user tries to create a question' do
     sign_in(user)

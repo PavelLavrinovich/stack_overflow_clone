@@ -7,8 +7,14 @@ h1 Question
   - if user_signed_in? && current_user.author?(@question)
     p class="edit-link" data-dom-id=dom_id(@question) = submit_tag 'Edit the question'
     .edit-answer-form id="#{dom_id(@question)}-edit-form"
-      = render 'questions/form', question: @question
+      = render 'questions/form', question: @question, remote: true
     p = link_to 'Delete the question', @question, method: :delete
+
+h2 Attachments
+
+.attachments
+  p = render @question.attachments
+
 
 h2 Answers
 

@@ -3,6 +3,8 @@
     p = link_to 'Choose the best', choose_the_best_answer_path(answer), method: :patch, remote: true,
             class: :choose_the_best
   p id="#{dom_id(answer)}-body" = answer.body
+  .attachments
+    p = render answer.attachments
   - if user_signed_in? && current_user.author?(answer)
     p class="edit-link" data-dom-id=dom_id(answer) = submit_tag 'Edit the answer'
     .edit-answer-form id="#{dom_id(answer)}-edit-form"

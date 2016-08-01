@@ -5,8 +5,9 @@ feature 'User views a questions with answers', %q{
   As an user
   I want to be able to view a question with answers
 } do
-  let(:question) { create(:question) }
-  let(:answers) { create_list(:answer, 10) }
+
+  given(:question) { create(:question) }
+  given(:answers) { create_list(:answer, 10) }
 
   scenario 'User tries to view question with answers' do
     question.answers = answers
